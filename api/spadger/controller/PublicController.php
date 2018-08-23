@@ -29,9 +29,10 @@ class PublicController extends RestBaseController
         $where['post_type'] = 1;        //文章类型:1 文章 2 页面
         $where['post_status'] = 1;      //状态： 1 已发布  2 未发布
         $list = $PortalPostModel
+            ->with('user')
             ->order('id desc')
             ->where($where)
-            ->field('id,post_title,post_excerpt')
+            ->field('post_content',true)
             ->paginate(15);
         if($list->isEmpty()){
             $this->error('没有可以显示的数据!');
