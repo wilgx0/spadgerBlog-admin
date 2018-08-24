@@ -21,23 +21,29 @@ class PublicController extends RestBaseController
     }
 
     /**
-     *
+     * 获取文章列表
      */
     public function get_share_list(){
         $PortalPostModel = new PortalPostModel();
+        $key = input('key','');
         $where = [];
         $where['post_type'] = 1;        //文章类型:1 文章 2 页面
         $where['post_status'] = 1;      //状态： 1 已发布  2 未发布
+        if(!empty($key)){
+            $where['post_title|post_keywords'] = ['like','%'.$key.'%'];
+        }
+
         $list = $PortalPostModel
             ->with('user')
             ->order('id desc')
             ->where($where)
-            ->field('post_content',true)
-            ->paginate(15);
+            ->field('post_content,post_excerpt',true)
+            ->paginate(10);
         if($list->isEmpty()){
             $this->error('没有可以显示的数据!');
         } else {
             $this->success('请求成功', $list);
         }
     }
+
 }

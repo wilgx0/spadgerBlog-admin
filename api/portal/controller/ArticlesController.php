@@ -31,6 +31,7 @@ class ArticlesController extends RestBaseController
     public function index()
     {
         $params                       = $this->request->get();
+       // var_dump($params);die();
         $params['where']['post_type'] = 1;
         $data                         = $this->postModel->getDatas($params);
 
@@ -48,6 +49,7 @@ class ArticlesController extends RestBaseController
      */
     public function read($id)
     {
+        //var_dump('test');die();
         if (intval($id) === 0) {
             $this->error('无效的文章id！');
         } else {
