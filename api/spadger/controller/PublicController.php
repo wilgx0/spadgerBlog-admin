@@ -34,11 +34,23 @@ class PublicController extends RestBaseController
         }
 
         $list = $PortalPostModel
-            ->with('user')
+            ->with([
+                'user'=>function($query){
+                    $query->field('id,user_nickname');
+                }
+            ])
             ->order('id desc')
             ->where($where)
             ->field('post_content,post_excerpt',true)
             ->paginate(10);
+        $list->each(function($value,$key) use ($list){
+//            var_dump($value->categories->toArray());
+//            var_dump($value);
+             $value->data('test',$value->categories->toArray());
+//            $list->offsetSet($key,$value);
+
+        });
+
         if($list->isEmpty()){
             $this->error('没有可以显示的数据!');
         } else {
