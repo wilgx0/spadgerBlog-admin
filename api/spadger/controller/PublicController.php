@@ -24,32 +24,38 @@ class PublicController extends RestBaseController
      * 获取文章列表
      */
     public function get_share_list(){
-        $PortalPostModel = new PortalPostModel();
         $key = input('key','');
+        $articleType = input('articleType','');
+        if(!$articleType){
+            $this->error('没有文章类型参数!');
+        }
         $where = [];
         $where['post_type'] = 1;        //文章类型:1 文章 2 页面
         $where['post_status'] = 1;      //状态： 1 已发布  2 未发布
         if(!empty($key)){
             $where['post_title|post_keywords'] = ['like','%'.$key.'%'];
         }
-
+        $PortalPostModel = new PortalPostModel();
+        $pageSize = [1=>10,2=>15];      //不同文章类型的分页大小 (分享10条,问答15条)
         $list = $PortalPostModel
-            ->with([
+            ->where('id','IN',function($query) use ($articleType){         //子查询
+                $query->table('cmf_portal_category_post')->where('category_id',$articleType)->field('id');
+            })
+            ->with([            //关联查询
                 'user'=>function($query){
                     $query->field('id,user_nickname');
-                }
+                },
+                'categories' =>function($query){}
             ])
             ->order('id desc')
             ->where($where)
             ->field('post_content,post_excerpt',true)
-            ->paginate(10);
-        $list->each(function($value,$key) use ($list){
-//            var_dump($value->categories->toArray());
-//            var_dump($value);
-             $value->data('test',$value->categories->toArray());
-//            $list->offsetSet($key,$value);
+            ->paginate($pageSize[$articleType])
+            ->each(function($value,$key){
+                //$value->data('categories',$value->categories->toArray());
+                $value->visible(['categories']);            //增加可查询字段
 
-        });
+            });
 
         if($list->isEmpty()){
             $this->error('没有可以显示的数据!');
