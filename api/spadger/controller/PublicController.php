@@ -16,10 +16,6 @@ use api\portal\model\PortalPostModel;
 class PublicController extends RestBaseController
 {
 
-    public function test(){
-        echo 'test';
-    }
-
     /**
      * 获取文章列表
      */
@@ -52,7 +48,7 @@ class PublicController extends RestBaseController
             ->field('post_content,post_excerpt',true)
             ->paginate($pageSize[$articleType])
             ->each(function($value,$key){
-                //$value->data('categories',$value->categories->toArray());
+                //$value->data('categories',$value->categories->toArray());     //获取并设置关联数据
                 $value->visible(['categories']);            //增加可查询字段
 
             });
