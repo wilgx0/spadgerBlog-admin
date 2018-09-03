@@ -114,6 +114,7 @@ class CommentsController extends RestBaseController
      */
     public function setComments()
     {
+        $this->getUserId();         //检查是否登录
         $data = $this->_setComments();
         if ($res = Comment::setComment($data)) {
             $this->success('评论成功', $res);
