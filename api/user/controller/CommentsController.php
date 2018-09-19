@@ -169,4 +169,17 @@ class CommentsController extends RestBaseController
         $data['email']     = $userData['user_email'];
         return $data;
     }
+
+    /**
+     * 评论点赞
+     */
+    public function zan(){
+        $id = input('id/d');
+        $ret = Comment::where('id',$id)->setInc('like_count');
+        if($ret){
+            $this->success('点赞成功');
+        } else {
+            $this->error('点赞失败');
+        }
+    }
 }
