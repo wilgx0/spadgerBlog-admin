@@ -62,6 +62,7 @@ class RestBaseController
      */
     public function __construct(Request $request = null)
     {
+
         if (is_null($request)) {
             $request = Request::instance();
         }
@@ -289,6 +290,7 @@ class RestBaseController
      */
     public function getUserId()
     {
+
         if (empty($this->userId)) {
             $this->error(['code' => 10001, 'msg' => '用户未登录']);
         }

@@ -15,9 +15,11 @@ namespace api\user\controller;
 use api\user\model\CommentModel as Comment;
 use api\user\model\UserModel as User;
 use cmf\controller\RestBaseController;
+use think\Request;
 
 class CommentsController extends RestBaseController
 {
+
 
     /**
      * [getUserComments 获取用户评论]
@@ -98,6 +100,7 @@ class CommentsController extends RestBaseController
      */
     public function delComments()
     {
+
         $input  = $this->request->param();
         $id     = $this->request->has('id') ? intval($input['id']) : $this->error('id参数不存在');
         $userId = $this->getUserId();
@@ -174,6 +177,7 @@ class CommentsController extends RestBaseController
      * 评论点赞
      */
     public function zan(){
+
         $id = input('id/d');
         $ret = Comment::where('id',$id)->setInc('like_count');
         if($ret){
