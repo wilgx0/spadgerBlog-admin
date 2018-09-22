@@ -60,4 +60,16 @@ class PublicController extends RestBaseController
         }
     }
 
+    public function test(){
+        $ret = Db::name('portal_post')
+            ->field("(
+            case post_status
+                when 0 then '未审'
+                when 1 then '已审'
+            end
+            ) 'status',count(id)")
+            ->group('status')
+            ->select();
+        var_dump($ret);
+    }
 }
