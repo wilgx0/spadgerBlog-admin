@@ -18,11 +18,6 @@ class UserController extends RestBaseController
 
 
 
-    /**
-     * 添加文章
-     */
-    public function add_article(){
 
-    }
 
 }
